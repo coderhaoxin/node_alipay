@@ -1,15 +1,13 @@
 var AlipayConfig = {
-    partner:"",
-    key:"",
-    seller_email:"",
+    partner: "10086",
+    key: "12306",
+    seller_email: "hh@qq.com",
 
     // 支付宝服务器通知的页面 要用 http://格式的完整路径，不允许加?id:123这类自定义参数
     notify_url:"http://127.0.0.1:3000/paynotify",
-
     // 当前页面跳转后的页面 要用 http://格式的完整路径，不允许加?id:123这类自定义参数
     // 域名不能写成http://localhost/create_direct_pay_by_user_jsp_utf8/return_url.jsp ，否则会导致return_url执行无效
     return_url:"http://127.0.0.1:3000/payreturn",
-
     // 支付宝通知验证地址
     ALIPAY_HOST: "mapi.alipay.com",
     HTTPS_VERIFY_PATH: "/gateway.do?service=notify_verify&",
@@ -17,9 +15,9 @@ var AlipayConfig = {
 
     input_charset:"UTF-8",
     sign_type:"MD5"
-};
+}
 
-var AlipayNotify={
+var AlipayNotify = {
     verity: function (params,callback) {
         var mysign=getMySign(params);
         var sign = params["sign"]?params["sign"]:"";
@@ -28,7 +26,6 @@ var AlipayNotify={
             var responseTxt = "true";
             if(params["notify_id"]) {
                 //获取远程服务器ATN结果，验证是否是支付宝服务器发来的请求
-
                 var partner = AlipayConfig.partner;
                 var veryfy_path = AlipayConfig.HTTPS_VERIFY_PATH + "partner=" + partner + "&notify_id=" + params["notify_id"];
 
@@ -43,7 +40,6 @@ var AlipayNotify={
         } else{
             callback(false);
         }
-
         //验证
         //responsetTxt的结果不是true，与服务器设置问题、合作身份者ID、notify_id一分钟失效有关
         //mysign与sign不等，与安全校验码、请求时的参数格式（如：带自定义参数等）、编码格式有关
@@ -104,13 +100,10 @@ var requestUrl=function(host,path,callback){
         console.error(e);
     });
 };
-/*
- * GET home page.
- */
 
 exports.index = function (req, res) {
-    res.render('index', { message:'验证' })
-};
+    res.render('index', { message: '验证' })
+}
 
 /**
  * 在应用中发送付款请求，替换掉构造form的应用

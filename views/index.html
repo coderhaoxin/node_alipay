@@ -1,98 +1,114 @@
 ﻿<html>
-<head>
-	<meta charset="utf-8">
-	<title>支付宝即时到帐</title>
-	<script>
-		function CheckForm() {
-			if (document.alipayment.subject.value.length == 0) {
-				alert("请输入商品名称.");
-				document.alipayment.subject.focus();
-				return false;
+	<head>
+		<meta charset="utf-8">
+		<title>支付宝即时到帐</title>
+		<script>
+			function CheckForm() {
+				if (document.alipayment.subject.value.length == 0) {
+					alert("请输入商品名称.");
+					document.alipayment.subject.focus();
+					return false;
+				}
+				if (document.alipayment.total_fee.value.length == 0) {
+					alert("请输入付款金额.");
+					document.alipayment.total_fee.focus();
+					return false;
+				}
+				var reg = new RegExp(/^\d*\.?\d{0,2}$/);
+				if (!reg.test(document.alipayment.total_fee.value)) {
+					alert("请正确输入付款金额");
+					document.alipayment.total_fee.focus();
+					return false;
+				}
+				if (Number(document.alipayment.total_fee.value) < 0.01) {
+					alert("付款金额金额最小是0.01.");
+					document.alipayment.total_fee.focus();
+					return false;
+				}
+				function getStrLength(value) {
+					return value.replace(/[^\x00-\xFF]/g, '**').length;
+				}
+				if (getStrLength(document.alipayment.alibody.value) > 200) {
+					alert("备注过长！请在100个汉字以内");
+					document.alipayment.alibody.focus();
+					return false;
+				}
+				if (getStrLength(document.alipayment.subject.value) > 256) {
+					alert("标题过长！请在128个汉字以内");
+					document.alipayment.subject.focus();
+					return false;
+				}
+				document.aplipayment.alibody.value = document.aplipayment.alibody.value.replace(/\n/g, '');
 			}
-			if (document.alipayment.total_fee.value.length == 0) {
-				alert("请输入付款金额.");
-				document.alipayment.total_fee.focus();
-				return false;
-			}
-			var reg = new RegExp(/^\d*\.?\d{0,2}$/);
-			if (! reg.test(document.alipayment.total_fee.value))
-			{
-				alert("请正确输入付款金额");
-				document.alipayment.total_fee.focus();
-				return false;
-			}
-			if (Number(document.alipayment.total_fee.value) < 0.01) {
-				alert("付款金额金额最小是0.01.");
-				document.alipayment.total_fee.focus();
-				return false;
-			}
-			function getStrLength(value){
-				return value.replace(/[^\x00-\xFF]/g,'**').length;
-			}
-			if(getStrLength(document.alipayment.alibody.value) > 200){
-				alert("备注过长！请在100个汉字以内");
-				document.alipayment.alibody.focus();
-				return false;
-			}
-			if(getStrLength(document.alipayment.subject.value) > 256){
-				alert("标题过长！请在128个汉字以内");
-				document.alipayment.subject.focus();
-				return false;
-			}
-			document.aplipayment.alibody.value = document.aplipayment.alibody.value.replace(/\n/g,'');
-		}
-	</script>
-	<link rel="stylesheet" type="text/css" href="/style.css">
-</head>
-<body>
-<div id="main">
-<div id="head">
-<div id="logo"></div>
-<dl class="alipay_link">
-	<a target="_blank" href="http://www.alipay.com/"><span>支付宝首页</span></a>|
-	<a target="_blank" href="https://b.alipay.com/home.htm"><span>商家服务</span></a>|
-	<a target="_blank" href="http://help.alipay.com/support/index_sh.htm"><span>帮助中心</span></a>
-</dl>
-<span class="title">支付宝即时到帐付款快速通道</span>
-</div>
-<div class="cashier-nav">
-<ol>
-	<li class="current">1、确认付款信息 →</li>
-	<li>2、付款 →</li>
-	<li class="last">3、付款完成</li>
-</ol>
-</div>
-    <div id="message"><%= message %></div>
-<form name=alipayment onSubmit="return CheckForm();" action=alipayto
-	method=post target="_blank">
-<div id="body" style="clear: left">
-<dl class="content">
-	<dt>标题：</dt>
-	<dd><span class="red-star">*</span> <input size=30 name=subject />
-	<span>如：7月5日定货款。</span></dd>
-	<dt>付款金额：</dt>
-	<dd><span class="red-star">*</span> <input maxLength=10 size=30
-		name=total_fee onfocus="if(Number(this.value)==0){this.value='';}"
-		value="00.00" /> <span>如：112.21</span></dd>
-	<dt>备注：</dt>
-	<dd><span class="null-star">*</span> <textarea
-		style="margin-left: 3px;" name=alibody rows=2 cols=40 wrap="physical"></textarea><br />
-	<span>（如联系方法，商品要求、数量等。100汉字内）</span></dd>
-	<dt></dt>
-	<dd><span class="new-btn-login-sp">
-	<button class="new-btn-login" type="submit" style="text-align: center;">确认付款</button>
-	</span></dd>
-</dl>
-</div>
-</form>
-<div id="foot">
-<ul class="foot-ul">
-	<li><font class=note-help>如果您点击“确认付款”按钮，即表示您同意向卖家购买此物品。 <br />
-	您有责任查阅完整的物品登录资料，包括卖家的说明和接受的付款方式。卖家必须承担物品信息正确登录的责任！ </font></li>
-	<li>支付宝版权所有 2011-2015 ALIPAY.COM</li>
-</ul>
-<ul>
-</div>
-</div>
-</body>
+		</script>
+		<link rel="stylesheet" type="text/css" href="/style.css">
+	</head>
+	<body>
+		<div id="main">
+			<div id="head">
+				<div id="logo"></div>
+				<dl class="alipay_link">
+					<a target="_blank" href="http://www.alipay.com/">
+						<span>支付宝首页</span>
+					</a>|
+					<a target="_blank" href="https://b.alipay.com/home.htm">
+						<span>商家服务</span>
+					</a>|
+					<a target="_blank" href="http://help.alipay.com/support/index_sh.htm">
+						<span>帮助中心</span>
+					</a>
+				</dl>
+				<span class="title">支付宝即时到帐付款</span>
+			</div>
+			<div class="cashier-nav">
+				<ol>
+					<li class="current">1、确认付款信息 →</li>
+					<li>2、付款 →</li>
+					<li class="last">3、付款完成</li>
+				</ol>
+			</div>
+			<div id="message"><%= message %></div>
+			<form name="alipayment" onSubmit="return CheckForm();" action="alipayto" method="post" target="_blank">
+				<div id="body" style="clear: left">
+					<dl class="content">
+						<dt>标题：</dt>
+						<dd>
+							<span class="red-star">*</span>
+							<input size="30" name="subject" placeholder="如：报名参加黄山摄影展">
+						</dd>
+						<dt>付款金额：</dt>
+						<dd>
+							<span class="red-star">*</span>
+							<input maxLength="10" size="30" name="total_fee" placeholder="如：888.88">
+						</dd>
+						<dt>备注：</dt>
+						<dd>
+							<span class="null-star">*</span>
+							<textarea style="margin-left:3px" name="alibody" rows="2" cols="40" placeholder="如联系方法，商品要求、数量等。100汉字内">
+							</textarea>
+							<br>
+						</dd>
+						<dt>
+						</dt>
+						<dd>
+							<span class="new-btn-login-sp">
+								<button class="new-btn-login" type="submit" style="text-align: center;">确认付款</button>
+							</span>
+						</dd>
+					</dl>
+				</div>
+			</form>
+			<div id="foot">
+				<ul class="foot-ul">
+					<li>
+						<font class="note-help">
+							如果您点击“确认付款”按钮，即表示您同意向卖家购买此物品。<br>
+							您有责任查阅完整的物品资料，包括卖家的说明和接受的付款方式。卖家必须承担物品信息正确的责任！
+						</font>
+					</li>
+				</ul>
+				<ul>
+			</div>
+		</div>
+	</body>
 </html>
