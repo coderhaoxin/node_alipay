@@ -1,45 +1,26 @@
-/* *
- *类名：AlipayConfig
- *功能：基础配置类
- *详细：设置帐户有关信息及返回路径
-
- *提示：如何获取安全校验码和合作身份者ID
- *1.用您的签约支付宝账号登录支付宝网站(www.alipay.com)
- *2.点击“商家服务”(https://b.alipay.com/order/myOrder.htm)
- *3.点击“查询合作者身份(PID)”、“查询安全校验码(Key)”
-
- *安全校验码查看时，输入支付密码后，页面呈灰色的现象，怎么办？
- *解决方法：
- *1、检查浏览器配置，不让浏览器做弹框屏蔽设置
- *2、更换浏览器或电脑，重新登录查询。
- */
 var AlipayConfig = {
     partner:"",
     key:"",
     seller_email:"",
 
-// 支付宝服务器通知的页面 要用 http://格式的完整路径，不允许加?id:123这类自定义参数
-// 必须保证其地址能够在互联网中访问的到
+    // 支付宝服务器通知的页面 要用 http://格式的完整路径，不允许加?id:123这类自定义参数
     notify_url:"http://127.0.0.1:3000/paynotify",
 
-// 当前页面跳转后的页面 要用 http://格式的完整路径，不允许加?id:123这类自定义参数
-// 域名不能写成http://localhost/create_direct_pay_by_user_jsp_utf8/return_url.jsp ，否则会导致return_url执行无效
+    // 当前页面跳转后的页面 要用 http://格式的完整路径，不允许加?id:123这类自定义参数
+    // 域名不能写成http://localhost/create_direct_pay_by_user_jsp_utf8/return_url.jsp ，否则会导致return_url执行无效
     return_url:"http://127.0.0.1:3000/payreturn",
 
     // 支付宝通知验证地址
-
     ALIPAY_HOST: "mapi.alipay.com",
     HTTPS_VERIFY_PATH: "/gateway.do?service=notify_verify&",
     ALIPAY_PATH:"gateway.do?",
 
-// 字符编码格式 目前支持 gbk 或 utf-8
     input_charset:"UTF-8",
-
-// 签名方式 不需修改
     sign_type:"MD5"
 };
+
 var AlipayNotify={
-    verity:function(params,callback){
+    verity: function (params,callback) {
         var mysign=getMySign(params);
         var sign = params["sign"]?params["sign"]:"";
         if(mysign==sign){
